@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komandų Taškų Skaitiklis</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Font import */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f3f4f6;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    
+    /* Container styles */
+    .container {
+      max-width: 64rem;
+      margin: 0 auto;
+    }
+    
+    /* Header styles */
+    h1 {
+      font-size: 1.875rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    
+    /* Timer section */
+    .timer-section {
+      margin-bottom: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      border: 2px solid #d1d5db;
+    }
+    
+    .timer-title {
+      color: #1f2937;
+      text-align: center;
+    }
+    
+    .timer-display {
+      font-size: 3.75rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 1rem 0;
+      color: #374151;
+    }
+    
+    .timer-controls {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    
+    /* Team sections */
+    .teams-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .teams-container {
+        flex-direction: row;
+      }
+    }
+    
+    .team-section {
+      flex: 1;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+    }
+    
+    .team-blue {
+      background-color: #dbeafe;
+      border: 2px solid #93c5fd;
+    }
+    
+    .team-blue h2 {
+      color: #1e40af;
+    }
+    
+    .team-blue .score {
+      color: #2563eb;
+    }
+    
+    .team-red {
+      background-color: #fee2e2;
+      border: 2px solid #fca5a5;
+    }
+    
+    .team-red h2 {
+      color: #991b1b;
+    }
+    
+    .team-red .score {
+      color: #dc2626;
+    }
+    
+    .score {
+      font-size: 3.75rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    
+    .team-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    /* Button styles */
+    button {
+      padding: 0.75rem 1.5rem;
+      font-weight: bold;
+      border-radius: 0.5rem;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    button:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+    
+    button i {
+      margin-right: 0.5rem;
+    }
+    
+    .btn-start {
+      background-color: #22c55e;
+    }
+    
+    .btn-start:hover:not(:disabled) {
+      background-color: #16a34a;
+    }
+    
+    .btn-pause {
+      background-color: #eab308;
+    }
+    
+    .btn-pause:hover:not(:disabled) {
+      background-color: #ca8a04;
+    }
+    
+    .btn-reset {
+      background-color: #ef4444;
+    }
+    
+    .btn-reset:hover {
+      background-color: #dc2626;
+    }
+    
+    .btn-blue {
+      background-color: #3b82f6;
+      flex: 1;
+    }
+    
+    .btn-blue:hover {
+      background-color: #2563eb;
+    }
+    
+    .btn-red {
+      background-color: #ef4444;
+      flex: 1;
+    }
+    
+    .btn-red:hover {
+      background-color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Komandų Taškų Skaitiklis</h1>
+    
+    <!-- Timer Section -->
+    <div class="timer-section">
+      <h2 class="timer-title">Laikmatis</h2>
+      <div class="timer-display" id="timer-display">03:00</div>
+      <div class="timer-controls">
+        <button id="start-timer" class="btn-start">
+          <i class="fas fa-play"></i> Pradėti
+        </button>
+        <button id="pause-timer" class="btn-pause" disabled>
+          <i class="fas fa-pause"></i> Pauzė
+        </button>
+        <button id="reset-timer" class="btn-reset">
+          <i class="fas fa-redo"></i> Atstatyti
+        </button>
+      </div>
+    </div>
+    
+    <div class="teams-container">
+      <!-- Team 1 Counter -->
+      <div class="team-section team-blue">
+        <h2>Mėlyna Komanda</h2>
+        <div class="score" id="team1-score">0</div>
+        <div class="team-controls">
+          <button id="team1-decrement" class="btn-blue">
+            <i class="fas fa-minus"></i> Atimti Tašką
+          </button>
+          <button id="team1-increment" class="btn-blue">
+            <i class="fas fa-plus"></i> Pridėti Tašką
+          </button>
+        </div>
+      </div>
+      
+      <!-- Team 2 Counter -->
+      <div class="team-section team-red">
+        <h2>Raudona Komanda</h2>
+        <div class="score" id="team2-score">0</div>
+        <div class="team-controls">
+          <button id="team2-decrement" class="btn-red">
+            <i class="fas fa-minus"></i> Atimti Tašką
+          </button>
+          <button id="team2-increment" class="btn-red">
+            <i class="fas fa-plus"></i> Pridėti Tašką
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Timer variables
+    let timeLeft = 180; // 3 minutes in seconds
+    let isTimerRunning = false;
+    let timerId = null;
+    
+    // Team scores
+    let team1Score = 0;
+    let team2Score = 0;
+    
+    // DOM elements
+    const timerDisplay = document.getElementById('timer-display');
+    const startTimerBtn = document.getElementById('start-timer');
+    const pauseTimerBtn = document.getElementById('pause-timer');
+    const resetTimerBtn = document.getElementById('reset-timer');
+    
+    const team1ScoreDisplay = document.getElementById('team1-score');
+    const team1IncrementBtn = document.getElementById('team1-increment');
+    const team1DecrementBtn = document.getElementById('team1-decrement');
+    
+    const team2ScoreDisplay = document.getElementById('team2-score');
+    const team2IncrementBtn = document.getElementById('team2-increment');
+    const team2DecrementBtn = document.getElementById('team2-decrement');
+    
+    // Format time as MM:SS
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+    
+    // Timer functions
+    function startTimer() {
+      if (isTimerRunning) return;
+      
+      // Reset timer to 3 minutes if it's at 0
+      if (timeLeft === 0) {
+        timeLeft = 180;
+      }
+      
+      isTimerRunning = true;
+      startTimerBtn.disabled = true;
+      pauseTimerBtn.disabled = false;
+      
+      timerId = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = formatTime(timeLeft);
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerId);
+          isTimerRunning = false;
+          startTimerBtn.disabled = false;
+          pauseTimerBtn.disabled = true;
+        }
+      }, 1000);
+    }
+    
+    function pauseTimer() {
+      if (!isTimerRunning) return;
+      
+      clearInterval(timerId);
+      isTimerRunning = false;
+      startTimerBtn.disabled = false;
+      pauseTimerBtn.disabled = true;
+    }
+    
+    function resetTimer() {
+      clearInterval(timerId);
+      timeLeft = 180;
+      isTimerRunning = false;
+      timerDisplay.textContent = formatTime(timeLeft);
+      startTimerBtn.disabled = false;
+      pauseTimerBtn.disabled = true;
+    }
+    
+    // Team score functions
+    function incrementTeam1() {
+      team1Score++;
+      team1ScoreDisplay.textContent = team1Score;
+    }
+    
+    function decrementTeam1() {
+      if (team1Score > 0) {
+        team1Score--;
+        team1ScoreDisplay.textContent = team1Score;
+      }
+    }
+    
+    function incrementTeam2() {
+      team2Score++;
+      team2ScoreDisplay.textContent = team2Score;
+    }
+    
+    function decrementTeam2() {
+      if (team2Score > 0) {
+        team2Score--;
+        team2ScoreDisplay.textContent = team2Score;
+      }
+    }
+    
+    // Event listeners
+    startTimerBtn.addEventListener('click', startTimer);
+    pauseTimerBtn.addEventListener('click', pauseTimer);
+    resetTimerBtn.addEventListener('click', resetTimer);
+    
+    team1IncrementBtn.addEventListener('click', incrementTeam1);
+    team1DecrementBtn.addEventListener('click', decrementTeam1);
+    
+    team2IncrementBtn.addEventListener('click', incrementTeam2);
+    team2DecrementBtn.addEventListener('click', decrementTeam2);
+  </script>
+</body>
+</html>
